@@ -1,10 +1,10 @@
-var http = require("http");
+var fs = require("fs");
+var https = require("https");
 var express = require("express")();
 var cors = require("cors");
 var dotenv = require("dotenv");
 var axios = require("axios");
 var bodyParser = require("body-parser");
-var fs = require("fs");
 var fastify = require("fastify")({
   logger: true,
   https: {
@@ -21,7 +21,13 @@ const { API_HTTP_URL, CORS_ORIGIN, HTTP_PORT, WS_PORT } = process.env;
 express.use(bodyParser.json());
 express.use(cors({ origin: CORS_ORIGIN }));
 
-const server = http.createServer(express);
+const server = https.createServer(
+  {
+    key: fs.readFileSync("./sslcert/key.pem"),
+    cert: fs.readFileSync("./sslcert/fullchain.pem"),
+  },
+  express
+);
 
 express.post("/", async function (req, res) {
   try {
