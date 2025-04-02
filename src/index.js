@@ -4,7 +4,14 @@ var cors = require("cors");
 var dotenv = require("dotenv");
 var axios = require("axios");
 var bodyParser = require("body-parser");
-var fastify = require("fastify")({ logger: true });
+var fs = require("fs");
+var fastify = require("fastify")({
+  logger: true,
+  https: {
+    key: fs.readFileSync("./sslcert/key.pem"),
+    cert: fs.readFileSync("./sslcert/cert.pem"),
+  },
+});
 var proxy = require("@fastify/http-proxy");
 
 dotenv.config();
