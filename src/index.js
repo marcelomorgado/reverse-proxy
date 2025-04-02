@@ -9,7 +9,7 @@ var fastify = require("fastify")({
   logger: true,
   https: {
     key: fs.readFileSync("./sslcert/key.pem"),
-    cert: fs.readFileSync("./sslcert/cert.pem"),
+    cert: fs.readFileSync("./sslcert/fullchain.pem"),
   },
 });
 var proxy = require("@fastify/http-proxy");
@@ -41,5 +41,5 @@ fastify.register(proxy, {
   websocket: true,
 });
 
-fastify.listen({ port: WS_PORT });
+fastify.listen({ port: WS_PORT, host: "0.0.0.0" });
 server.listen(HTTP_PORT);
